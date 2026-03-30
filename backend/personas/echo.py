@@ -29,7 +29,7 @@ async def react_to_draft(
         user_prompt=prompt["user_prompt"],
         temperature=0.8,
     )
-    response["text"] = ensure_label(response["text"], "[댓글]")
+    response["text"] = ensure_label(response["text"], "[\ub313\uae00]")
     response["structured"] = normalize_echo_comment(response["text"])
     response["text"] = format_structured_echo_comment(response["structured"])
     response["prompt"] = prompt["meta"]

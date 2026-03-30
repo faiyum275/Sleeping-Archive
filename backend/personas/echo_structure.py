@@ -5,74 +5,74 @@ import re
 
 
 SECTION_ORDER = (
-    ("reaction", "반응"),
-    ("immersion", "몰입"),
-    ("dropoff", "이탈감"),
+    ("reaction", "\ubc18\uc751"),
+    ("immersion", "\ubab0\uc785"),
+    ("dropoff", "\uc774\ud0c8\uac10"),
 )
 
 SECTION_KEYWORDS = {
     "reaction": (
-        "좋",
-        "궁금",
-        "재밌",
-        "여운",
-        "끌",
-        "인상",
-        "선명",
-        "감정",
-        "반응",
+        "\uc88b",
+        "\uad81\uae08",
+        "\uc7ac\ubc0c",
+        "\uc5ec\uc6b4",
+        "\ub04c",
+        "\uc778\uc0c1",
+        "\uc120\uba85",
+        "\uac10\uc815",
+        "\ubc18\uc751",
     ),
     "immersion": (
-        "몰입",
-        "계속",
-        "다음",
-        "읽고",
-        "넘기",
-        "호흡",
-        "리듬",
-        "속도",
-        "빠져",
-        "끌어당",
+        "\ubab0\uc785",
+        "\uacc4\uc18d",
+        "\ub2e4\uc74c",
+        "\uc77d\uace0",
+        "\ub118\uae30",
+        "\ud638\ud761",
+        "\ub9ac\ub4ec",
+        "\uc18d\ub3c4",
+        "\ube60\uc838",
+        "\ub04c\uc5b4\ub2f9",
     ),
     "dropoff": (
-        "이탈",
-        "늘어",
-        "끊",
-        "헷갈",
-        "지루",
-        "깨",
-        "멈칫",
-        "튀",
-        "막혔",
-        "불명확",
-        "약해",
+        "\uc774\ud0c8",
+        "\ub298\uc5b4",
+        "\ub04a",
+        "\ud5f7\uac08",
+        "\uc9c0\ub8e8",
+        "\uae68",
+        "\uba48\uce6b",
+        "\ud280",
+        "\ub9c9\ud614",
+        "\ubd88\uba85\ud655",
+        "\uc57d\ud574",
     ),
 }
 
 DROPOFF_MARKERS = (
-    "이탈",
-    "늘어",
-    "끊",
-    "헷갈",
-    "지루",
-    "깨",
-    "멈칫",
-    "튀",
-    "막혔",
-    "약해",
+    "\uc774\ud0c8",
+    "\ub298\uc5b4",
+    "\ub04a",
+    "\ud5f7\uac08",
+    "\uc9c0\ub8e8",
+    "\uae68",
+    "\uba48\uce6b",
+    "\ud280",
+    "\ub9c9\ud614",
+    "\uc57d\ud574",
 )
 IMMERSION_MARKERS = (
-    "몰입",
-    "계속",
-    "다음",
-    "읽고",
-    "넘기",
-    "호흡",
-    "리듬",
-    "빠져",
+    "\ubab0\uc785",
+    "\uacc4\uc18d",
+    "\ub2e4\uc74c",
+    "\uc77d\uace0",
+    "\ub118\uae30",
+    "\ud638\ud761",
+    "\ub9ac\ub4ec",
+    "\ube60\uc838",
 )
 CLAUSE_SPLIT_RE = re.compile(
-    r"\s*(?:,|;|그런데|하지만|근데|다만|한데|그리고)\s*"
+    r"\s*(?:,|;|\uadf8\ub7f0\ub370|\ud558\uc9c0\ub9cc|\uadfc\ub370|\ub2e4\ub9cc|\ud55c\ub370|\uadf8\ub9ac\uace0)\s*"
 )
 
 
@@ -91,12 +91,12 @@ def normalize_echo_comment(text: str) -> dict[str, Any]:
 
 
 def format_structured_echo_comment(payload: dict[str, Any]) -> str:
-    lines = ["[댓글]", ""]
+    lines = ["[\ub313\uae00]", ""]
     sections = payload.get("sections") or {}
 
     for key, label in SECTION_ORDER:
         lines.append(f"{label}:")
-        items = sections.get(key) or ["없음"]
+        items = sections.get(key) or ["\uc5c6\uc74c"]
         lines.extend(f"- {item}" for item in items)
         lines.append("")
 
@@ -211,7 +211,7 @@ def _dedupe_points(points: list[str]) -> list[str]:
     seen: set[str] = set()
     for point in points:
         normalized = point.strip()
-        if not normalized or normalized == "없음" or normalized in seen:
+        if not normalized or normalized == "\uc5c6\uc74c" or normalized in seen:
             continue
         seen.add(normalized)
         cleaned.append(normalized)
@@ -221,7 +221,7 @@ def _dedupe_points(points: list[str]) -> list[str]:
 def _normalize_point_text(point: str) -> str:
     normalized = point.strip()
     normalized = re.sub(
-        r"^(?:그리고|그런데|하지만|근데|다만)\s+",
+        r"^(?:\uadf8\ub9ac\uace0|\uadf8\ub7f0\ub370|\ud558\uc9c0\ub9cc|\uadfc\ub370|\ub2e4\ub9cc)\s+",
         "",
         normalized,
     )

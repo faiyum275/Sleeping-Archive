@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>잠든 서고 | Sleeping Archive</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Josefin+Sans:wght@400;600&family=Noto+Serif+KR:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body class="title-active">
+    <div class="ambient-glow"></div>
+    <div class="ambient-noise"></div>
+    <div id="silhouette" class="silhouette" aria-hidden="true"></div>
+
+    <div id="titleScreen" class="title-screen" aria-hidden="false">
+      <div class="title-screen__veil"></div>
+      <div class="title-screen__scan"></div>
+      <div class="title-stars" aria-hidden="true">
+        <span class="title-star star-a"></span>
+        <span class="title-star star-b"></span>
+        <span class="title-star star-c"></span>
+        <span class="title-star star-d"></span>
+        <span class="title-star star-e"></span>
+        <span class="title-star star-f"></span>
+      </div>
+
+      <section class="title-stage" aria-label="잠든 서고 시작 화면">
+        <p class="title-kicker">Offline Story Engine</p>
+
+        <div class="title-glyph" aria-hidden="true">
+          <span class="glyph-ring glyph-ring-outer"></span>
+          <span class="glyph-ring glyph-ring-middle"></span>
+          <span class="glyph-ring glyph-ring-inner"></span>
+          <span class="glyph-core"></span>
+        </div>
+
+        <div class="title-copy">
+          <p class="title-subtitle">Sleeping Archive / Chronicle Boot</p>
+          <h1 class="title-logo">
+            <span>잠든</span>
+            <span>서고</span>
+          </h1>
+          <p id="titleStatus" class="title-status">로컬 서고를 깨우는 중...</p>
+        </div>
+
+        <div class="title-actions">
+          <button id="titleStartButton" class="button title-start" type="button" disabled>
+            동기화 중
+          </button>
+          <p class="title-hint">Press start to enter the archive</p>
+        </div>
+      </section>
+    </div>
+
+    <div id="attachmentViewer" class="viewer-shell hidden" aria-hidden="true">
+      <div id="viewerBackdrop" class="viewer-backdrop"></div>
+      <article class="viewer-card panel">
+        <div class="viewer-topline">
+          <div>
+            <p id="viewerPersona" class="eyebrow">Attachment</p>
+            <h2 id="viewerTitle">파일 미리보기</h2>
+            <p id="viewerMeta" class="workflow-meta">선택한 첨부 파일이 여기에 열립니다.</p>
+          </div>
+          <div class="panel-actions">
+            <button id="downloadViewerMarkdownButton" class="button subtle small">MD 저장</button>
+            <button id="closeViewerButton" class="button subtle small">닫기</button>
+          </div>
+        </div>
+        <pre id="viewerContent" class="viewer-content"></pre>
+      </article>
+    </div>
+
+    <div class="app-shell">
+      <header class="topbar panel">
+        <div>
+          <p class="eyebrow">Sleeping Archive</p>
+          <h1>잠든 서고</h1>
+          <p id="greeting" class="greeting">
+            저자님이 오셨군요. 서고가 다시 선명해지고 있어요.
+          </p>
+        </div>
+
+        <div class="topbar-meta">
+          <div class="status-chip">
+            <span class="status-label">API</span>
+            <strong id="serviceMode">mock</strong>
+          </div>
+          <div class="status-chip">
+            <span class="status-label">모델</span>
+            <strong id="serviceModel">gemini-2.5-pro</strong>
+          </div>
+          <div class="status-chip">
+            <span class="status-label">부재</span>
+            <strong id="awayDays">0일</strong>
+          </div>
+          <div class="status-chip">
+            <span class="status-label">누적 루프</span>
+            <strong id="loopTotal">0</strong>
+          </div>
+        </div>
+      </header>
+
+      <div class="workspace-grid">
+        <aside class="control-rail">
+          <nav class="panel rail-panel view-nav" aria-label="메인 보기 전환">
+            <button id="viewButtonMain" class="view-card selected" data-view="main">
+              <span class="eyebrow">Main</span>
+              <strong>대화</strong>
+              <span id="viewSummaryMain" class="view-card-copy">
+                현재 루프의 대화와 첨부 파일이 여기 모입니다.
+              </span>
+            </button>
+
+            <button id="viewButtonWorkroom" class="view-card" data-view="workroom">
+              <span class="eyebrow">Workroom</span>
+              <strong>작업실</strong>
+              <span id="viewSummaryWorkroom" class="view-card-copy">
+                설정, 세부 실행 옵션, 루프 상세를 정리합니다.
+              </span>
+            </button>
+
+            <button id="viewButtonArchive" class="view-card" data-view="archive">
+              <span class="eyebrow">Archive</span>
+              <strong>보관함</strong>
+              <span id="viewSummaryArchive" class="view-card-copy">
+                히스토리와 Sil 로그를 따로 봅니다.
+              </span>
+            </button>
+          </nav>
+
+          <section class="panel rail-panel persona-panel">
+            <div class="section-heading compact-heading">
+              <p class="eyebrow">Residents</p>
+              <h2>페르소나</h2>
+            </div>
+
+            <div class="persona-presence-grid">
+              <article id="persona-rune" class="persona-mini rune active">
+                <div class="persona-mini-head">
+                  <span class="persona-icon">✒</span>
+                  <div>
+                    <h3>루네</h3>
+                    <p>작가</p>
+                  </div>
+                </div>
+                <p class="persona-line" id="line-rune"></p>
+              </article>
+
+              <article id="persona-canon" class="persona-mini canon">
+                <div class="persona-mini-head">
+                  <span class="persona-icon">📖</span>
+                  <div>
+                    <h3>카논</h3>
+                    <p>편집자</p>
+                  </div>
+                </div>
+                <p class="persona-line" id="line-canon"></p>
+              </article>
+
+              <article id="persona-echo" class="persona-mini echo">
+                <div class="persona-mini-head">
+                  <span class="persona-icon">💬</span>
+                  <div>
+                    <h3>에코</h3>
+                    <p>독자</p>
+                  </div>
+                </div>
+                <p class="persona-line" id="line-echo"></p>
+              </article>
+
+              <article id="persona-sil" class="persona-mini sil">
+                <div class="persona-mini-head">
+                  <span class="persona-icon">🪡</span>
+                  <div>
+                    <h3>실</h3>
+                    <p>수선사</p>
+                  </div>
+                </div>
+                <p class="persona-line mono" id="line-sil"></p>
+              </article>
+            </div>
+          </section>
+
+          <section class="panel rail-panel quicklook-panel">
+            <div class="section-heading compact-heading">
+              <p class="eyebrow">Quick Look</p>
+              <h2>지금 서고</h2>
+            </div>
+
+            <p id="quickRunSummary" class="workflow-meta">
+              플롯을 넣고 루프를 시작하면 대화가 여기서 움직입니다.
+            </p>
+            <div id="quickRunMeta" class="run-meta"></div>
+            <p id="quickSelectionSummary" class="workflow-meta">선택된 루프가 아직 없습니다.</p>
+          </section>
+        </aside>
+
+        <main class="view-stack">
+          <section class="view-panel active" data-view-panel="main">
+            <section class="panel chat-panel">
+              <div class="section-heading thread-heading">
+                <div>
+                  <p class="eyebrow">Main Thread</p>
+                  <h2>서고 대화</h2>
+                </div>
+                <div id="threadMeta" class="focus-meta"></div>
+              </div>
+
+              <div id="chatStatusBanner" class="thread-status-banner">
+                저자가 플롯을 건네면 루네와 카논, 에코가 채팅처럼 응답합니다.
+              </div>
+
+              <div id="chatThread" class="chat-thread"></div>
+            </section>
+
+            <section class="panel composer-panel">
+              <div class="section-heading compact-heading">
+                <p class="eyebrow">Author Input</p>
+                <h2>플롯 투입</h2>
+              </div>
+
+              <label class="field">
+                <span>작업 제목</span>
+                <input id="titleInput" type="text" placeholder="예: 12화 초안 정리" />
+              </label>
+
+              <label class="field">
+                <span>이번 장면의 플롯</span>
+                <textarea
+                  id="plotInput"
+                  rows="8"
+                  placeholder="저자가 건네는 플롯을 적으세요. 예: 폐관 직전의 서고에서 사서가 금서의 마지막 페이지를 발견한다."
+                ></textarea>
+              </label>
+
+              <div class="action-row">
+                <button id="estimateButton" class="button subtle">비용 추정</button>
+                <button id="runButton" class="button primary">루프 시작</button>
+                <button id="cancelButton" class="button warning" type="button" disabled>루프 취소</button>
+              </div>
+
+              <div id="estimateCard" class="estimate-card">
+                <p class="estimate-label">예상 토큰 / 비용</p>
+                <div id="estimateSummary" class="estimate-summary">
+                  플롯을 입력하면 예상 사용량을 계산합니다.
+                </div>
+              </div>
+
+              <p class="workflow-meta">
+                설정 문서, 루프 옵션, 이전 문맥 입력은 작업실에서 조정합니다.
+              </p>
+              <p id="systemNotice" class="system-notice"></p>
+            </section>
+          </section>
+
+          <section class="view-panel" data-view-panel="workroom">
+            <div class="workroom-grid">
+              <section class="panel">
+                <div class="section-heading compact-heading">
+                  <p class="eyebrow">Documents</p>
+                  <h2>설정 문서</h2>
+                </div>
+
+                <label class="field">
+                  <span>설정_기본</span>
+                  <textarea id="settingsBase" rows="8"></textarea>
+                </label>
+
+                <label class="field">
+                  <span>설정_스포일러</span>
+                  <textarea id="settingsSpoiler" rows="6"></textarea>
+                </label>
+
+                <label class="field">
+                  <span>설정_선택</span>
+                  <textarea id="settingsStyle" rows="6"></textarea>
+                </label>
+
+                <button id="saveSettingsButton" class="button subtle">문서 저장</button>
+              </section>
+
+              <section class="panel">
+                <div class="section-heading compact-heading">
+                  <p class="eyebrow">Loop</p>
+                  <h2>실행 설정</h2>
+                </div>
+
+                <div class="two-column">
+                  <label class="field compact">
+                    <span>최대 루프</span>
+                    <input id="maxLoopsInput" type="number" min="1" max="10" value="3" />
+                  </label>
+
+                  <label class="field compact">
+                    <span>이전 내용 모드</span>
+                    <select id="contextModeInput">
+                      <option value="hybrid">최근 3화 + 요약</option>
+                      <option value="recent">최근 전문만</option>
+                      <option value="summary">요약만</option>
+                    </select>
+                  </label>
+                </div>
+
+                <label class="checkbox-field">
+                  <input id="earlyStopInput" type="checkbox" checked />
+                  <span>조기 종료 조건 사용</span>
+                </label>
+
+                <label class="checkbox-field">
+                  <input id="parallelInput" type="checkbox" checked />
+                  <span>카논 / 에코 병렬 실행</span>
+                </label>
+
+                <label class="field">
+                  <span>최근 N화 전문</span>
+                  <textarea id="recentContextInput" rows="8"></textarea>
+                </label>
+
+                <label class="field">
+                  <span>이전 요약</span>
+                  <textarea id="summaryInput" rows="5"></textarea>
+                </label>
+              </section>
+
+              <section class="panel wide-panel">
+                <div class="section-heading compact-heading">
+                  <p class="eyebrow">Workflow</p>
+                  <h2>현재 진행</h2>
+                </div>
+
+                <div class="workflow-overview">
+                  <div class="workflow-copy">
+                    <div class="loop-topline">
+                      <strong id="loopStatusText">서고가 조용히 숨을 고르고 있습니다.</strong>
+                      <span id="loopStageText" class="stage-pill">idle</span>
+                    </div>
+
+                    <p id="loopProgressMeta" class="workflow-meta">
+                      루프를 시작하면 현재 회차와 완료 상태가 정리됩니다.
+                    </p>
+
+                    <div id="runMeta" class="run-meta"></div>
+                  </div>
+
+                  <div class="progress-cluster">
+                    <div class="progress-label-row">
+                      <span class="eyebrow">Loop Progress</span>
+                      <strong id="progressPercent">0%</strong>
+                    </div>
+                    <div class="progress-track">
+                      <div id="progressBar" class="progress-bar"></div>
+                    </div>
+                    <p id="progressCaption" class="progress-caption">
+                      카드가 뒤집힐수록 진행률이 갱신됩니다.
+                    </p>
+                  </div>
+                </div>
+
+                <div id="loopCards" class="loop-cards"></div>
+              </section>
+
+              <section class="panel wide-panel">
+                <div class="section-heading compact-heading">
+                  <p class="eyebrow">Finale</p>
+                  <h2>최종본</h2>
+                </div>
+
+                <div class="final-meta-row">
+                  <div class="final-meta-stack">
+                    <div id="finalMeta" class="final-meta"></div>
+                    <div class="panel-actions">
+                      <button id="exportSelectedMarkdownButton" class="button subtle small">
+                        선택 루프 MD
+                      </button>
+                      <button id="exportSelectedJsonButton" class="button subtle small">
+                        선택 루프 JSON
+                      </button>
+                    </div>
+                  </div>
+                  <span id="selectedIterationBadge" class="stage-pill subtle">선택된 루프 없음</span>
+                </div>
+
+                <article id="latestFinal" class="final-output empty">
+                  최종본이 아직 없습니다.
+                </article>
+
+                <div id="reflectionSummary" class="reflection-summary">
+                  선택된 루프의 반영 흔적이 여기에 표시됩니다.
+                </div>
+              </section>
+
+              <section class="panel wide-panel">
+                <div class="section-heading compact-heading">
+                  <p class="eyebrow">Editor</p>
+                  <h2>루프 상세 읽기</h2>
+                </div>
+
+                <div id="iterationRail" class="iteration-rail"></div>
+                <div id="iterationFocus" class="iteration-focus"></div>
+              </section>
+            </div>
+          </section>
+
+          <section class="view-panel" data-view-panel="archive">
+            <div class="archive-grid">
+              <section class="panel archive-history-panel">
+                <div class="section-heading compact-heading">
+                  <p class="eyebrow">History</p>
+                  <h2>저장된 결과물</h2>
+                </div>
+
+                <div class="history-toolbar">
+                  <label class="field compact history-search-field">
+                    <span>검색</span>
+                    <input
+                      id="historySearchInput"
+                      type="search"
+                      placeholder="제목, 플롯, 최종본 검색"
+                    />
+                  </label>
+
+                  <label class="field compact history-filter-field">
+                    <span>필터</span>
+                    <select id="historyFilterInput">
+                      <option value="all">전체</option>
+                      <option value="stopped">조기 종료</option>
+                      <option value="continue">추가 루프 가능</option>
+                    </select>
+                  </label>
+
+                  <div class="toolbar-actions">
+                    <button id="exportHistoryMarkdownButton" class="button subtle small">
+                      결과물 MD
+                    </button>
+                    <button id="exportHistoryJsonButton" class="button subtle small">
+                      결과물 JSON
+                    </button>
+                  </div>
+                </div>
+
+                <div class="history-layout">
+                  <div id="historyList" class="history-list history-list-compact"></div>
+                  <article id="historyDetail" class="history-detail">
+                    <div class="empty-state">저장된 결과물을 선택하면 상세가 열립니다.</div>
+                  </article>
+                </div>
+              </section>
+
+              <section class="panel archive-sil-panel">
+                <div class="section-heading compact-heading">
+                  <p class="eyebrow">Sil</p>
+                  <h2>수선사 로그</h2>
+                </div>
+                <div id="silLogList" class="sil-log-list"></div>
+              </section>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
