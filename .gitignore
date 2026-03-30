@@ -1,0 +1,12 @@
+__pycache__/
+.pytest_cache/
+.venv/
+.env
+build/
+dist/
+.tmp_test/
+storage/
+backend/storage/history/
+backend/storage/*.json
+*.pyc
+*.lnk
