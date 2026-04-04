@@ -1,14 +1,9 @@
-__pycache__/
-.pytest_cache/
-.venv/
-.env
 build/
 dist/
 .tmp_test/
-storage/
-!backend/storage/
+.tmp_repo_push/
+**/__pycache__/
+storage/history/
 backend/storage/history/
 backend/storage/*.json
 !backend/storage/manifest.json
-*.pyc
-*.lnk

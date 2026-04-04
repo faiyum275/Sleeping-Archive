@@ -1,0 +1,80 @@
+{
+  "schema_version": "sleeping-archive.checklist-manifest.v1",
+  "document_kind": "checklist_manifest",
+  "folder": "checklist",
+  "purpose": "Store the source-of-truth data that drives the generated root CHECKLIST.md document.",
+  "source_of_truth": {
+    "primary_files": [
+      "items.json",
+      "events.jsonl"
+    ],
+    "generated_output": "../CHECKLIST.md",
+    "schema_reference": "schema.json",
+    "renderer": "../scripts/render_checklist.py",
+    "validator_and_renderer_logic": "../backend/checklist.py"
+  },
+  "files": [
+    {
+      "path": "items.json",
+      "role": "Main checklist document in structured JSON form, split into active_items and archived_items.",
+      "contains": [
+        "active_items for unfinished work",
+        "archived_items for completed records",
+        "stable ids",
+        "status",
+        "priority",
+        "section classification",
+        "acceptance criteria",
+        "tags and grouping fields"
+      ]
+    },
+    {
+      "path": "events.jsonl",
+      "role": "Append-only event log for recent completions and meaningful checklist changes.",
+      "format": "One JSON object per line."
+    },
+    {
+      "path": "schema.json",
+      "role": "Machine-friendly schema reference for checklist data."
+    },
+    {
+      "path": "../CHECKLIST.md",
+      "role": "Human-readable generated checklist view.",
+      "generated": true
+    }
+  ],
+  "maintenance_rules": [
+    "Do not edit ../CHECKLIST.md directly.",
+    "Add new checklist items to items.json.active_items.",
+    "Do not change an item's id once it has been established.",
+    "Update unfinished items by editing active_items fields such as status, priority, summary, and acceptance.",
+    "When a task is completed, move it from active_items to archived_items and append a new line to events.jsonl.",
+    "After changing source data, rerun python scripts/render_checklist.py to regenerate CHECKLIST.md."
+  ],
+  "field_notes": [
+    {
+      "field": "id",
+      "meaning": "Stable identifier used for indexing, comparison, and future migration."
+    },
+    {
+      "field": "areas",
+      "meaning": "Functional grouping tags. One item may belong to multiple areas."
+    },
+    {
+      "field": "spotlights",
+      "meaning": "Curated section exposure such as current position or checkpoint."
+    },
+    {
+      "field": "section_ranks",
+      "meaning": "Per-section ordering override when an item appears in multiple sections."
+    },
+    {
+      "field": "events.jsonl",
+      "meaning": "Append-only history that preserves completion and migration records outside the active root checklist view."
+    },
+    {
+      "field": "active_items / archived_items",
+      "meaning": "Explicit split between unfinished work and completed records to reduce scanning cost for both humans and agents."
+    }
+  ]
+}

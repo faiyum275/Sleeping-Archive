@@ -1,0 +1,31 @@
+{
+  "schema_version": "sleeping-archive.storage-package-manifest.v1",
+  "document_kind": "folder_manifest",
+  "folder": "backend/storage",
+  "purpose": "Explain the difference between the storage Python package and the canonical runtime storage roots.",
+  "canonical_files": [
+    {
+      "path": "repository.py",
+      "role": "Local JSON persistence layer used by the application."
+    },
+    {
+      "path": "__init__.py",
+      "role": "Package marker for storage helpers."
+    }
+  ],
+  "do_not_treat_as_runtime_source_of_truth": [
+    "backend/storage/*.json",
+    "backend/storage/history/"
+  ],
+  "runtime_truth": {
+    "source_mode_root": "storage/",
+    "packaged_mode_root": "<exe dir>/SleepingArchiveData/storage/",
+    "repo_example_when_built_locally": "dist/SleepingArchiveData/storage/",
+    "override_env_var": "SLEEPING_ARCHIVE_HOME"
+  },
+  "rules": [
+    "If you want to change persistence behavior, edit backend/storage/repository.py and backend/config.py.",
+    "If you want live source-mode state, inspect storage/ instead of backend/storage/.",
+    "If you want packaged-app state, inspect SleepingArchiveData/storage/ next to the executable."
+  ]
+}

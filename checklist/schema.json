@@ -1,0 +1,193 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sleeping-archive.local/checklist/schema.json",
+  "title": "Sleeping Archive Checklist",
+  "type": "object",
+  "required": [
+    "version",
+    "updated_at",
+    "title",
+    "intro",
+    "sections",
+    "active_items",
+    "archived_items"
+  ],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "updated_at": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "intro": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/section"
+      }
+    },
+    "active_items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/item"
+      }
+    },
+    "archived_items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/item"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "section": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "object",
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "spotlight",
+                "priority",
+                "area",
+                "status"
+              ]
+            },
+            "value": {
+              "type": "string"
+            },
+            "values": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "now",
+                  "next",
+                  "later"
+                ]
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "item": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "kind",
+        "status",
+        "rank",
+        "updated_at"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "capability",
+            "task",
+            "decision"
+          ]
+        },
+        "status": {
+          "enum": [
+            "todo",
+            "in_progress",
+            "done",
+            "later"
+          ]
+        },
+        "priority": {
+          "enum": [
+            "now",
+            "next",
+            "later"
+          ]
+        },
+        "rank": {
+          "type": "integer"
+        },
+        "updated_at": {
+          "type": "string"
+        },
+        "areas": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "spotlights": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "section_ranks": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "summary": {
+          "type": "string"
+        },
+        "acceptance": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "relates_to": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

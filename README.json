@@ -1,0 +1,673 @@
+{
+  "schema_version": "sleeping-archive.readme.v1",
+  "document_kind": "manual_ai_readme",
+  "source": {
+    "primary_document": "README.json",
+    "quick_start_index": "PROJECT_MAP.json",
+    "replaces": [
+      "README.md"
+    ],
+    "curation_mode": "manual",
+    "goal": "Optimize project understanding for AI retrieval, task routing, and implementation planning."
+  },
+  "onboarding": {
+    "first_pass_rule": "Use PROJECT_MAP.json for the first repo scan. Use README.json after the route is clear and deeper runtime detail is needed.",
+    "recommended_read_order": [
+      "AGENTS.md",
+      "PROJECT_MAP.json",
+      "CHECKLIST.md",
+      "README.json"
+    ]
+  },
+  "normalization_rules": [
+    "Commands use argv arrays when they can be executed directly without shell parsing.",
+    "Paths are repository-relative unless a runtime path is inherently external.",
+    "Legacy README prose is collapsed into normalized fields instead of being copied verbatim.",
+    "Sections are organized by decision usefulness for AI agents: what the app is, how it runs, where data lives, where to edit."
+  ],
+  "project": {
+    "name_ko": "잠든 서고",
+    "name_en": "Sleeping Archive",
+    "slug": "sleeping-archive",
+    "category": "local loop-based writing assistant",
+    "summary": "A local writing workroom where Rune drafts, Canon reviews continuity and structure, Echo reacts like a reader, and Rune produces a revised final text.",
+    "platforms": [
+      "Windows"
+    ],
+    "runtime_stack": [
+      "Python",
+      "FastAPI",
+      "static frontend",
+      "Gemini API or mock mode"
+    ],
+    "persistence_model": "All state, history, cost records, and logs are stored locally as JSON."
+  },
+  "glossary": [
+    {
+      "term": "Rune",
+      "role": "writer persona",
+      "responsibility": "Creates draft and final text."
+    },
+    {
+      "term": "Canon",
+      "role": "editor persona",
+      "responsibility": "Reviews continuity, structure, future risk, and next actions."
+    },
+    {
+      "term": "Echo",
+      "role": "reader persona",
+      "responsibility": "Leaves emotional reaction, immersion, and disengagement comments."
+    },
+    {
+      "term": "Sil",
+      "role": "maintainer persona",
+      "responsibility": "Handles greetings, absence logging, recovery, and error traces."
+    },
+    {
+      "term": "Workroom",
+      "role": "UI view",
+      "responsibility": "Focuses on the currently selected loop and its outputs."
+    },
+    {
+      "term": "Archive",
+      "role": "UI view",
+      "responsibility": "Searches, filters, compares, and exports accumulated history."
+    }
+  ],
+  "core_design": {
+    "what_it_is": [
+      "A loop-driven writing assistant rather than a one-shot generator.",
+      "A local-first workroom that preserves structured review data for later comparison.",
+      "A project that can run end-to-end even without a live Gemini API key."
+    ],
+    "what_it_is_not": [
+      "Not a tool optimized only for producing a final answer in one pass.",
+      "Not a cloud-first app with remote persistence as the default assumption."
+    ],
+    "design_goals": [
+      "Stabilize the draft -> review -> revision -> next-loop decision cycle.",
+      "Preserve review output as reusable structured data instead of disposable prose.",
+      "Reduce the gap between development mode and user mode with mock support."
+    ]
+  },
+  "runtime_modes": {
+    "mock": {
+      "activation_condition": "GEMINI_API_KEY is missing.",
+      "purpose": "Allow full-flow verification without live API access."
+    },
+    "live": {
+      "activation_condition": "GEMINI_API_KEY is present.",
+      "model_env_var": "GEMINI_MODEL",
+      "default_model": "gemini-2.5-pro"
+    }
+  },
+  "loop_model": {
+    "sequence": [
+      "User enters title, plot, settings, previous context, and loop config.",
+      "Rune creates the draft.",
+      "Canon and Echo review the draft, usually in parallel.",
+      "Rune creates the final text using draft, feedback, and comment.",
+      "Quality is evaluated to decide whether the run should stop early.",
+      "A history JSON artifact is written for the completed loop."
+    ],
+    "loop_config": {
+      "max_loops": {
+        "type": "integer",
+        "default": 3,
+        "range": [
+          1,
+          10
+        ]
+      },
+      "early_stop_enabled": {
+        "type": "boolean",
+        "default": true
+      },
+      "parallel_feedback": {
+        "type": "boolean",
+        "default": true
+      }
+    },
+    "quality_gate": {
+      "source_files": [
+        "backend/loop/runner.py",
+        "backend/loop/quality_check.py"
+      ],
+      "description": "Quality is computed after final generation from Canon and Echo outputs. If early stop is enabled and quality.should_stop is true, remaining loops are skipped."
+    },
+    "history_payload_fields": [
+      "run_id",
+      "loop_index",
+      "title",
+      "created_at",
+      "plot",
+      "settings_snapshot",
+      "previous_context",
+      "outputs",
+      "feedback_structured",
+      "comment_structured",
+      "quality",
+      "usage",
+      "usage_summary",
+      "prompts"
+    ]
+  },
+  "ui_surfaces": [
+    {
+      "name": "title_screen",
+      "purpose": "Opening transition before entering the main workspace."
+    },
+    {
+      "name": "main",
+      "purpose": "Chat-centered workspace for settings, plot input, estimation, and run control."
+    },
+    {
+      "name": "workroom",
+      "purpose": "Focused loop inspection for current or selected iteration."
+    },
+    {
+      "name": "archive",
+      "purpose": "History search, filtering, detail view, and export."
+    }
+  ],
+  "api_surface": [
+    {
+      "method": "GET",
+      "path": "/",
+      "purpose": "Serve the frontend index page."
+    },
+    {
+      "method": "GET",
+      "path": "/api/state",
+      "purpose": "Return greeting, settings, loop state, Sil log, history, meta, and service status."
+    },
+    {
+      "method": "GET",
+      "path": "/api/loop-state",
+      "purpose": "Return current loop state only."
+    },
+    {
+      "method": "GET",
+      "path": "/api/history",
+      "purpose": "Return recent history entries."
+    },
+    {
+      "method": "GET",
+      "path": "/api/sil-log",
+      "purpose": "Return Sil logs."
+    },
+    {
+      "method": "PUT",
+      "path": "/api/settings",
+      "purpose": "Persist settings documents."
+    },
+    {
+      "method": "POST",
+      "path": "/api/cost-estimate",
+      "purpose": "Estimate token and cost usage for the configured run."
+    },
+    {
+      "method": "POST",
+      "path": "/api/run",
+      "purpose": "Start a loop run."
+    },
+    {
+      "method": "POST",
+      "path": "/api/run/cancel",
+      "purpose": "Cancel the active loop run."
+    }
+  ],
+  "commands": {
+    "easy_windows_launch": {
+      "type": "shortcut",
+      "path": "잠든 서고 실행 바로가기.lnk"
+    },
+    "exe_launch": {
+      "argv": [
+        "dist/SleepingArchive.exe"
+      ],
+      "notes": "Packaged version opens the browser automatically and stores data under SleepingArchiveData/storage."
+    },
+    "local_launcher": {
+      "argv": [
+        "python",
+        "launcher.py"
+      ]
+    },
+    "local_launcher_no_browser": {
+      "argv": [
+        "python",
+        "launcher.py",
+        "--no-browser",
+        "--port",
+        "8000"
+      ]
+    },
+    "development_server": {
+      "steps": [
+        {
+          "argv": [
+            "python",
+            "-m",
+            "venv",
+            ".venv"
+          ]
+        },
+        {
+          "shell": ".venv\\Scripts\\activate"
+        },
+        {
+          "argv": [
+            "pip",
+            "install",
+            "-r",
+            "requirements.txt"
+          ]
+        },
+        {
+          "argv": [
+            "uvicorn",
+            "backend.main:app",
+            "--reload"
+          ]
+        }
+      ],
+      "open_url": "http://127.0.0.1:8000"
+    },
+    "build_exe": {
+      "argv": [
+        "powershell",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        ".\\build_launcher.ps1"
+      ]
+    }
+  },
+  "environment_variables": [
+    {
+      "name": "SLEEPING_ARCHIVE_HOME",
+      "required": false,
+      "default": "unset",
+      "description": "Overrides the application home directory used for storage."
+    },
+    {
+      "name": "GEMINI_API_KEY",
+      "required": false,
+      "default": "",
+      "description": "If unset, the app falls back to mock mode."
+    },
+    {
+      "name": "GEMINI_MODEL",
+      "required": false,
+      "default": "gemini-2.5-pro",
+      "description": "Gemini model name for live mode."
+    },
+    {
+      "name": "GEMINI_API_BASE_URL",
+      "required": false,
+      "default": "https://generativelanguage.googleapis.com/v1beta",
+      "description": "Base URL for Gemini API requests."
+    },
+    {
+      "name": "GEMINI_TIMEOUT_SECONDS",
+      "required": false,
+      "default": 120,
+      "description": "Request timeout for Gemini calls."
+    },
+    {
+      "name": "GEMINI_MAX_RETRIES",
+      "required": false,
+      "default": 2,
+      "description": "Maximum number of Gemini retry attempts."
+    },
+    {
+      "name": "GEMINI_RETRY_BASE_DELAY_SECONDS",
+      "required": false,
+      "default": 1.5,
+      "description": "Initial retry backoff."
+    },
+    {
+      "name": "GEMINI_RETRY_MAX_DELAY_SECONDS",
+      "required": false,
+      "default": 8,
+      "description": "Maximum retry backoff."
+    },
+    {
+      "name": "DEFAULT_MAX_LOOPS",
+      "required": false,
+      "default": 3,
+      "description": "Default max loop count used in config."
+    },
+    {
+      "name": "GEMINI_INPUT_COST_PER_1M",
+      "required": false,
+      "default": 1.25,
+      "description": "Input pricing for the standard tier."
+    },
+    {
+      "name": "GEMINI_INPUT_COST_PER_1M_LARGE",
+      "required": false,
+      "default": 2.5,
+      "description": "Input pricing for the large tier."
+    },
+    {
+      "name": "GEMINI_OUTPUT_COST_PER_1M",
+      "required": false,
+      "default": 10.0,
+      "description": "Output pricing for the standard tier."
+    },
+    {
+      "name": "GEMINI_OUTPUT_COST_PER_1M_LARGE",
+      "required": false,
+      "default": 15.0,
+      "description": "Output pricing for the large tier."
+    },
+    {
+      "name": "GEMINI_PRICING_THRESHOLD_TOKENS",
+      "required": false,
+      "default": 200000,
+      "description": "Threshold used to switch pricing tiers."
+    }
+  ],
+  "storage": {
+    "app_home_resolution": [
+      "If SLEEPING_ARCHIVE_HOME is set, use it.",
+      "If running as a frozen executable, use <exe dir>/SleepingArchiveData.",
+      "Otherwise use the repository root."
+    ],
+    "source_run_paths": {
+      "settings": "storage/settings.json",
+      "loop_state": "storage/loop_state.json",
+      "sil_log": "storage/sil_log.json",
+      "app_meta": "storage/app_meta.json",
+      "history_dir": "storage/history"
+    },
+    "packaged_run_paths": {
+      "app_home": "dist/SleepingArchiveData",
+      "storage_root": "dist/SleepingArchiveData/storage"
+    },
+    "non_canonical_repo_artifacts": [
+      {
+        "path": "backend/storage/*.json",
+        "reason": "Package-local JSON artifacts may exist, but they are not the active runtime store."
+      },
+      {
+        "path": "backend/storage/history/",
+        "reason": "Same as above; do not confuse this with the canonical source-mode history directory."
+      }
+    ],
+    "history_file_pattern": "<run_id>_loop<NN>_<safe_title>.json"
+  },
+  "structured_data": {
+    "prompt_templates": {
+      "location": "backend/personas/prompts.py",
+      "keys": [
+        "rune_draft",
+        "canon_review",
+        "echo_comment",
+        "rune_final"
+      ],
+      "versioning_rule": "When prompt wording or response structure changes, bump the template version."
+    },
+    "iteration_state_fields": [
+      "draft",
+      "feedback",
+      "feedback_structured",
+      "comment",
+      "comment_structured",
+      "final",
+      "quality",
+      "history_file",
+      "usage",
+      "usage_summary",
+      "prompts"
+    ],
+    "checklist_system": {
+      "human_readable_output": "CHECKLIST.md",
+      "source_of_truth": [
+        "checklist/items.json",
+        "checklist/events.jsonl"
+      ],
+      "operator_manifest": "checklist/manifest.json",
+      "renderer": "scripts/render_checklist.py",
+      "validator_and_renderer_logic": "backend/checklist.py",
+      "schema_reference": "checklist/schema.json",
+      "rule": "Do not edit CHECKLIST.md directly."
+    }
+  },
+  "code_map": [
+    {
+      "path": "PROJECT_MAP.json",
+      "role": "Quick-start routing map for first-contact AI agents."
+    },
+    {
+      "path": "backend/main.py",
+      "role": "FastAPI entrypoint and API surface."
+    },
+    {
+      "path": "backend/models.py",
+      "role": "Pydantic request models for settings, previous context, cost estimate, and run requests."
+    },
+    {
+      "path": "backend/config.py",
+      "role": "Runtime directories, defaults, and environment-based config loading."
+    },
+    {
+      "path": "backend/storage/repository.py",
+      "role": "Local JSON persistence, visit metadata, history listing, and filename generation."
+    },
+    {
+      "path": "backend/loop/runner.py",
+      "role": "Main run orchestration, cancellation, interruption recovery, and history persistence."
+    },
+    {
+      "path": "backend/loop/quality_check.py",
+      "role": "Loop quality evaluation used for early stopping."
+    },
+    {
+      "path": "backend/personas/prompts.py",
+      "role": "Prompt templates, versions, and prompt request builders."
+    },
+    {
+      "path": "backend/personas/client.py",
+      "role": "Gemini client implementation and mode handling."
+    },
+    {
+      "path": "backend/personas/sil.py",
+      "role": "Sil logging and maintainer-side system messages."
+    },
+    {
+      "path": "backend/checklist.py",
+      "role": "Checklist validation and markdown rendering from structured checklist data."
+    },
+    {
+      "path": "backend/storage/manifest.json",
+      "role": "Folder-level note that clarifies why backend/storage is code, not the canonical runtime storage root."
+    },
+    {
+      "path": "checklist/manifest.json",
+      "role": "Operator-facing manifest that explains checklist folder purpose, source-of-truth files, and maintenance rules."
+    },
+    {
+      "path": "frontend/index.html",
+      "role": "Main HTML shell."
+    },
+    {
+      "path": "frontend/style.css",
+      "role": "Frontend styling."
+    },
+    {
+      "path": "frontend/app.js",
+      "role": "Frontend state, polling, UI rendering, export, and interaction logic."
+    },
+    {
+      "path": "scripts/render_checklist.py",
+      "role": "CLI entrypoint for checklist markdown generation and consistency checks."
+    },
+    {
+      "path": "launcher.py",
+      "role": "Convenience launcher for local execution."
+    },
+    {
+      "path": "build_launcher.ps1",
+      "role": "Build helper for the packaged executable."
+    },
+    {
+      "path": "SleepingArchive.spec",
+      "role": "Executable packaging spec."
+    }
+  ],
+  "common_task_entrypoints": [
+    {
+      "task": "Change API response schema or route behavior",
+      "primary_files": [
+        "backend/main.py",
+        "backend/models.py"
+      ],
+      "secondary_files": [
+        "backend/storage/repository.py"
+      ]
+    },
+    {
+      "task": "Change loop execution order, cancellation, or recovery behavior",
+      "primary_files": [
+        "backend/loop/runner.py"
+      ],
+      "secondary_files": [
+        "backend/loop/quality_check.py",
+        "backend/storage/repository.py"
+      ]
+    },
+    {
+      "task": "Change persona prompt wording or prompt version metadata",
+      "primary_files": [
+        "backend/personas/prompts.py"
+      ]
+    },
+    {
+      "task": "Change Gemini configuration or pricing defaults",
+      "primary_files": [
+        "backend/config.py",
+        "backend/pricing.py"
+      ]
+    },
+    {
+      "task": "Change frontend interactions, view switching, export, or attachment behavior",
+      "primary_files": [
+        "frontend/app.js"
+      ],
+      "secondary_files": [
+        "frontend/index.html",
+        "frontend/style.css"
+      ]
+    },
+    {
+      "task": "Change checklist source data or rendering",
+      "primary_files": [
+        "checklist/items.json",
+        "checklist/events.jsonl",
+        "backend/checklist.py",
+        "scripts/render_checklist.py"
+      ]
+    },
+    {
+      "task": "Change local persistence format or storage path behavior",
+      "primary_files": [
+        "backend/storage/repository.py",
+        "backend/config.py"
+      ]
+    }
+  ],
+  "testing": {
+    "commands": [
+      {
+        "argv": [
+          "python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-v"
+        ]
+      },
+      {
+        "argv": [
+          "python",
+          "scripts/render_checklist.py",
+          "--check"
+        ]
+      },
+      {
+        "argv": [
+          "node",
+          "--check",
+          "frontend/app.js"
+        ]
+      }
+    ],
+    "coverage_focus": [
+      "prompt version persistence",
+      "Gemini retry and response validation",
+      "mock-mode full flow",
+      "loop cancellation",
+      "restart recovery policy",
+      "pricing calculations",
+      "Canon structured output",
+      "Echo structured output",
+      "quality evaluation",
+      "visit greeting branching",
+      "frontend smoke interactions"
+    ]
+  },
+  "constraints": [
+    "State and history are intentionally local-first JSON files.",
+    "CHECKLIST.md is generated output and should not be edited directly.",
+    "Packaged executable and source mode use different storage roots.",
+    "Loop cancellation and interrupted-run recovery are core behaviors, not edge cases.",
+    "History export supports both markdown and JSON at the UI layer."
+  ],
+  "current_status": {
+    "phase": "Beyond MVP; actively polishing real usability.",
+    "confirmed_capabilities": [
+      "chat-centered main UI",
+      "Workroom and Archive separation",
+      "structured Canon feedback",
+      "structured Echo comment axes",
+      "usage and prompt version persistence",
+      "history search/filter/detail/export",
+      "restart recovery",
+      "run cancellation",
+      "title screen and re-entry messaging",
+      "mock and live mode switching",
+      "Windows executable distribution"
+    ],
+    "strategic_assessment": [
+      "The project is aligned with its original goal of making loops easier to read, compare, and continue.",
+      "Future effort should prioritize writing support quality over presentation flourishes."
+    ]
+  },
+  "next_focus": [
+    {
+      "id": "quality_visibility",
+      "summary": "Expose loop quality scores and improvement deltas more clearly in the UI.",
+      "why": "Quality data already exists but trend visibility is still weak."
+    },
+    {
+      "id": "feedback_reuse",
+      "summary": "Feed repeated Canon and Echo issues back into prompt correction or summaries.",
+      "why": "Recurring weaknesses should become reusable guidance instead of repeated manual diagnosis."
+    },
+    {
+      "id": "work_context_storage",
+      "summary": "Strengthen per-work context storage and automatic summaries.",
+      "why": "Longer-term usability depends on preserving recent text, summaries, and fixed notes by work."
+    },
+    {
+      "id": "packaged_startup_verification",
+      "summary": "Automate executable startup verification.",
+      "why": "The packaged Windows build is a first-class delivery path."
+    }
+  ]
+}

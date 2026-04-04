@@ -1,0 +1,7 @@
+{"at":"2026-03-30","type":"completed","item_id":"frontend-min-interaction-test","summary":"프론트엔드 최소 상호작용 smoke test 자동화"}
+{"at":"2026-03-30","type":"completed","item_id":"main-chat-density-balloon-info-tuning","summary":"메인 채팅 밀도와 말풍선 정보량 추가 조정"}
+{"at":"2026-03-30","type":"completed","item_id":"visit-greeting-branch-upgrade","summary":"첫 실행 / 복귀 / 장기 부재 문구 분기 고도화"}
+{"at":"2026-03-30","type":"completed","item_id":"early-stop-quality-signal-based","summary":"조기 종료 판단 로직 고도화"}
+{"at":"2026-03-30","type":"completed","item_id":"canon-feedback-structured","summary":"카논 피드백 구조화"}
+{"at":"2026-03-30","type":"completed","item_id":"echo-comment-structured-axes","summary":"에코 코멘트의 반응/몰입/이탈감 축 분리"}
+{"at":"2026-04-02","type":"migration","summary":"CHECKLIST.md 원본을 checklist/items.json과 checklist/events.jsonl로 이관했다."}

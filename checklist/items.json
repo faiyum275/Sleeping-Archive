@@ -1,0 +1,1413 @@
+{
+  "version": 2,
+  "updated_at": "2026-04-05",
+  "title": "잠든 서고 개발 체크리스트",
+  "intro": "이 문서는 지금 남아 있는 일만 빠르게 보기 위한 작업 목록이다.",
+  "sections": [
+    {
+      "id": "priority_current",
+      "title": "현재 우선순위",
+      "source": {
+        "type": "priority",
+        "values": [
+          "now"
+        ]
+      }
+    },
+    {
+      "id": "checkpoint",
+      "title": "중간 점검",
+      "source": {
+        "type": "spotlight",
+        "value": "checkpoint"
+      }
+    },
+    {
+      "id": "loop_quality",
+      "title": "루프 품질",
+      "source": {
+        "type": "area",
+        "value": "loop_quality"
+      }
+    },
+    {
+      "id": "context_management",
+      "title": "이전 내용 관리",
+      "source": {
+        "type": "area",
+        "value": "context_management"
+      }
+    },
+    {
+      "id": "frontend_ux",
+      "title": "프론트엔드 / UX",
+      "source": {
+        "type": "area",
+        "value": "frontend_ux"
+      }
+    },
+    {
+      "id": "stability",
+      "title": "안정화 / 유지보수",
+      "source": {
+        "type": "area",
+        "value": "stability"
+      }
+    },
+    {
+      "id": "testing",
+      "title": "테스트",
+      "source": {
+        "type": "area",
+        "value": "testing"
+      }
+    },
+    {
+      "id": "worldbuilding",
+      "title": "세계관 연출",
+      "source": {
+        "type": "area",
+        "value": "worldbuilding"
+      }
+    },
+    {
+      "id": "later_backlog",
+      "title": "지금은 미뤄도 되는 것",
+      "source": {
+        "type": "status",
+        "value": "later"
+      }
+    }
+  ],
+  "active_items": [
+    {
+      "id": "prioritize-writing-support-over-flair",
+      "title": "다음 단계부터는 연출 확장보다 `더 잘 쓰게 돕는 기능`을 우선한다.",
+      "kind": "decision",
+      "status": "todo",
+      "priority": "next",
+      "rank": 40,
+      "updated_at": "2026-04-02",
+      "spotlights": [
+        "checkpoint"
+      ],
+      "tags": [
+        "direction",
+        "priority"
+      ],
+      "summary": "연출 확장 요청이 오더라도 루프 품질과 이어쓰기 지원 개선을 먼저 판단 기준에 둔다.",
+      "acceptance": [
+        "다음 체크리스트 변경 때 루프 품질, 문맥 관리, 재활용 연결 항목이 먼저 갱신된다.",
+        "연출 항목은 핵심 작업을 막지 않는 범위에서만 추가한다."
+      ]
+    },
+    {
+      "id": "evaluate-next-step-by-loop-finish-and-session-carryover",
+      "title": "다음 단계의 판단 기준은 `이번 루프를 더 잘 끝내게 돕는가`와 `다음 세션에서 더 쉽게 이어 쓰게 하는가` 두 가지로 둔다.",
+      "kind": "decision",
+      "status": "todo",
+      "priority": "next",
+      "rank": 50,
+      "updated_at": "2026-04-02",
+      "spotlights": [
+        "checkpoint"
+      ],
+      "tags": [
+        "direction",
+        "evaluation"
+      ],
+      "summary": "새 기능을 넣을 때 즉시 효용과 세션 간 연결성을 함께 본다.",
+      "acceptance": [
+        "새 항목 설명에 현재 루프 효용 또는 다음 세션 연결 이유가 포함된다.",
+        "우선순위 조정 시 두 기준 가운데 무엇을 강화하는지 기록한다."
+      ]
+    },
+    {
+      "id": "expose-loop-quality-records-clearly",
+      "title": "루프별 품질 점수 기록을 더 명확히 노출",
+      "kind": "task",
+      "status": "todo",
+      "priority": "now",
+      "rank": 60,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "loop_quality"
+      ],
+      "tags": [
+        "quality",
+        "ui"
+      ],
+      "summary": "점수와 근거가 현재 카드와 상세에서 더 빨리 읽히도록 밀도를 조정한다.",
+      "acceptance": [
+        "카드에서 현재 품질 점수와 판단 상태를 바로 읽을 수 있다.",
+        "상세 화면에서 점수 근거를 별도 탐색 없이 확인할 수 있다."
+      ],
+      "relates_to": [
+        "surface-loop-quality-score-and-reason"
+      ]
+    },
+    {
+      "id": "compare-improvement-between-loops",
+      "title": "이전 루프 대비 개선 여부 비교",
+      "kind": "task",
+      "status": "todo",
+      "priority": "now",
+      "rank": 70,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "loop_quality"
+      ],
+      "tags": [
+        "quality",
+        "comparison"
+      ],
+      "summary": "현재 루프가 직전 루프보다 좋아졌는지, 악화됐는지, 유지됐는지를 구조적으로 남긴다.",
+      "acceptance": [
+        "히스토리 상세에서 직전 루프 대비 개선 여부를 표시한다.",
+        "비교 기준이 quality 데이터에 구조 필드로 저장된다."
+      ],
+      "relates_to": [
+        "surface-loop-quality-score-and-reason"
+      ]
+    },
+    {
+      "id": "connect-repeated-feedback-to-prompt-adjustment",
+      "title": "반복되는 지적을 프롬프트 보정에 연결",
+      "kind": "task",
+      "status": "todo",
+      "priority": "now",
+      "rank": 80,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "loop_quality"
+      ],
+      "tags": [
+        "feedback",
+        "prompts"
+      ],
+      "summary": "카논과 에코가 반복해서 남기는 약점을 다음 루프 프롬프트나 메모에 재주입한다.",
+      "acceptance": [
+        "반복 지적을 묶는 규칙이 정의된다.",
+        "다음 루프 입력에 자동 보정된 메모가 포함된다."
+      ],
+      "relates_to": [
+        "canon-feedback-structured",
+        "echo-comment-structured-axes",
+        "work-context-storage-structure"
+      ]
+    },
+    {
+      "id": "work-context-storage-structure",
+      "title": "작품별 문맥 저장 구조",
+      "kind": "task",
+      "status": "todo",
+      "priority": "now",
+      "rank": 40,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "context_management"
+      ],
+      "tags": [
+        "context",
+        "works"
+      ],
+      "summary": "최근 원문, 요약, 고정 메모를 작품 기준으로 묶는 저장 구조를 만든다.",
+      "acceptance": [
+        "작품 id 기준으로 문맥 데이터를 불러오고 저장할 수 있다.",
+        "루프 실행 시 선택한 작품 문맥이 payload에 포함된다."
+      ]
+    },
+    {
+      "id": "auto-summary-generation",
+      "title": "자동 요약 생성",
+      "kind": "task",
+      "status": "todo",
+      "priority": "now",
+      "rank": 20,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "context_management"
+      ],
+      "tags": [
+        "summary",
+        "context"
+      ],
+      "summary": "긴 원문이나 누적 히스토리를 다음 세션에 이어쓰기 좋은 압축 요약으로 만든다.",
+      "acceptance": [
+        "요약 생성 결과를 작품 문맥에 저장할 수 있다.",
+        "다음 루프 입력 시 자동 요약을 선택적으로 포함할 수 있다."
+      ],
+      "relates_to": [
+        "work-context-storage-structure"
+      ]
+    },
+    {
+      "id": "recent-n-source-input-ux",
+      "title": "최근 N개 원문 입력 UX 개선",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 10,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "context_management"
+      ],
+      "tags": [
+        "input",
+        "ux"
+      ],
+      "summary": "최근 입력 원문을 다시 불러오고 재사용하는 흐름을 덜 번거롭게 만든다.",
+      "acceptance": [
+        "최근 원문 목록을 빠르게 선택할 수 있다.",
+        "선택한 원문이 현재 입력과 충돌 없이 병합된다."
+      ]
+    },
+    {
+      "id": "manual-summary-edit-and-pin",
+      "title": "요약 수동 편집/고정",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 30,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "context_management"
+      ],
+      "tags": [
+        "summary",
+        "editing"
+      ],
+      "summary": "자동 요약을 사용자가 직접 다듬고 다음 세션 기준점으로 고정할 수 있게 한다.",
+      "acceptance": [
+        "자동 생성된 요약을 수동으로 수정해서 저장할 수 있다.",
+        "고정된 요약은 새 자동 요약으로 덮어쓰지 않는다."
+      ],
+      "relates_to": [
+        "auto-summary-generation",
+        "work-context-storage-structure"
+      ]
+    },
+    {
+      "id": "work-fixed-notes-rules",
+      "title": "작품별 고정 메모 / 금지 규칙 / 유지 규칙 저장",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 50,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "context_management"
+      ],
+      "tags": [
+        "rules",
+        "memory"
+      ],
+      "summary": "작품마다 반드시 유지할 설정과 피해야 할 규칙을 구조 데이터로 보존한다.",
+      "acceptance": [
+        "작품 기준으로 고정 메모와 규칙을 저장할 수 있다.",
+        "루프 실행 시 해당 규칙이 프롬프트에 자동 반영된다."
+      ],
+      "relates_to": [
+        "work-context-storage-structure"
+      ]
+    },
+    {
+      "id": "context-overflow-prevention-strategy",
+      "title": "컨텍스트 초과 방지 전략",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 60,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "context_management"
+      ],
+      "tags": [
+        "context",
+        "limits"
+      ],
+      "summary": "문맥 누적이 길어져도 루프 입력이 무너지지 않도록 압축 규칙과 우선순위를 둔다.",
+      "acceptance": [
+        "포함 순서와 생략 순서가 정의된다.",
+        "긴 문맥에서도 초과 없이 실행 가능한 fallback이 있다."
+      ],
+      "relates_to": [
+        "auto-summary-generation",
+        "work-context-storage-structure"
+      ]
+    },
+    {
+      "id": "loop-quality-trend-ui",
+      "title": "루프 품질 점수/개선 추세를 한눈에 보는 UI",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 110,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "frontend_ux"
+      ],
+      "tags": [
+        "quality",
+        "ui"
+      ],
+      "summary": "점수 비교와 추세를 시각적으로 한 번에 읽을 수 있게 한다.",
+      "acceptance": [
+        "최근 루프의 점수 추세를 한 화면에서 볼 수 있다.",
+        "개선 여부와 현재 상태가 색인 가능 구조로 함께 노출된다."
+      ],
+      "relates_to": [
+        "compare-improvement-between-loops",
+        "expose-loop-quality-records-clearly"
+      ]
+    },
+    {
+      "id": "work-context-selection-and-pinned-summary-ui",
+      "title": "작품별 문맥 선택과 요약 고정 UI",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 120,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "frontend_ux"
+      ],
+      "tags": [
+        "context",
+        "summary",
+        "ui"
+      ],
+      "summary": "작품 문맥과 고정 요약을 메인 흐름 안에서 쉽게 고를 수 있게 한다.",
+      "acceptance": [
+        "현재 작품 문맥을 UI에서 선택할 수 있다.",
+        "고정된 요약이 어떤 상태인지 화면에서 바로 확인된다."
+      ],
+      "relates_to": [
+        "work-context-storage-structure",
+        "manual-summary-edit-and-pin"
+      ]
+    },
+    {
+      "id": "title-transition-sound-glitch-option",
+      "title": "타이틀 전환 효과의 사운드/글리치 옵션",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 130,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "frontend_ux"
+      ],
+      "tags": [
+        "title-screen",
+        "effects"
+      ],
+      "summary": "타이틀 전환 연출을 설정 가능한 옵션으로 분리한다.",
+      "acceptance": [
+        "사운드와 글리치 효과를 켜고 끌 수 있다.",
+        "기본값이 사용자에게 과하지 않게 유지된다."
+      ],
+      "relates_to": [
+        "title-screen-and-presentation"
+      ]
+    },
+    {
+      "id": "scene-transition-by-run-result-status",
+      "title": "완료 / 조기 종료 / 실패 상태별 장면 전환 연출",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 60,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "worldbuilding"
+      ],
+      "tags": [
+        "scene",
+        "status"
+      ],
+      "summary": "루프 결과 상태마다 서고의 장면 전환 톤을 구분한다.",
+      "acceptance": [
+        "완료, 조기 종료, 실패 상태가 시각적으로 구분된다.",
+        "연출 차이가 상태 이해를 방해하지 않는다."
+      ]
+    },
+    {
+      "id": "strengthen-exception-classification",
+      "title": "예외 분류 강화",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 70,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "stability"
+      ],
+      "tags": [
+        "errors",
+        "classification"
+      ],
+      "summary": "실패 상황을 복구 가능, 사용자 수정 필요, 시스템 이상으로 나누어 기록한다.",
+      "acceptance": [
+        "대표 예외가 분류 체계에 매핑된다.",
+        "Sil 로그와 API 응답이 분류 값을 함께 제공한다."
+      ]
+    },
+    {
+      "id": "catalog-auto-repairable-errors",
+      "title": "자동 수선 가능 오류 목록 정리",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 80,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "stability"
+      ],
+      "tags": [
+        "errors",
+        "repair"
+      ],
+      "summary": "자동 복구 가능한 오류를 식별해 대응 전략과 로그 기준을 정리한다.",
+      "acceptance": [
+        "자동 복구 대상 오류 목록이 구조화 데이터로 남는다.",
+        "각 오류마다 시도할 복구 절차가 정리된다."
+      ],
+      "relates_to": [
+        "strengthen-exception-classification"
+      ]
+    },
+    {
+      "id": "repair-failure-recovery-flags",
+      "title": "수선 실패 후 복구 플래그 체계 정리",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 90,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "stability"
+      ],
+      "tags": [
+        "repair",
+        "recovery"
+      ],
+      "summary": "자동 수선이 실패했을 때 남길 상태 플래그와 후속 흐름을 분명히 한다.",
+      "acceptance": [
+        "복구 실패 상태가 loop_state 또는 로그에 구조적으로 기록된다.",
+        "재시도와 사용자 안내 흐름이 분리된다."
+      ],
+      "relates_to": [
+        "catalog-auto-repairable-errors"
+      ]
+    },
+    {
+      "id": "sil-log-filter-detail-view",
+      "title": "Sil 로그 필터 / 상세 보기",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 100,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "stability"
+      ],
+      "tags": [
+        "sil",
+        "logs"
+      ],
+      "summary": "Sil 로그를 오류 종류와 시점별로 더 쉽게 추적할 수 있게 만든다.",
+      "acceptance": [
+        "Sil 로그를 유형이나 상태로 필터링할 수 있다.",
+        "개별 로그 항목의 상세 내용을 별도 화면이나 패널에서 볼 수 있다."
+      ]
+    },
+    {
+      "id": "show-preserved-data-in-ui",
+      "title": "어떤 데이터가 보존됐는지 UI에 명시",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 110,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "stability"
+      ],
+      "tags": [
+        "storage",
+        "ux"
+      ],
+      "summary": "설정, 히스토리, 문맥, 로그 가운데 무엇이 남는지 사용자가 명확히 알 수 있게 한다.",
+      "acceptance": [
+        "보존 데이터 종류와 위치를 UI에서 확인할 수 있다.",
+        "삭제되거나 임시인 데이터와 구분해서 안내한다."
+      ],
+      "relates_to": [
+        "work-context-storage-structure"
+      ]
+    },
+    {
+      "id": "exe-startup-verification-automation",
+      "title": "실행 파일 기동 검증 자동화",
+      "kind": "task",
+      "status": "todo",
+      "priority": "next",
+      "rank": 100,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "testing"
+      ],
+      "tags": [
+        "exe",
+        "automation"
+      ],
+      "summary": "배포용 실행 파일이 실제로 뜨는지 자동 검증 경로를 만든다.",
+      "acceptance": [
+        "빌드 후 `.exe` 기동을 자동 확인하는 테스트가 있다.",
+        "실패 시 로그나 상태 코드로 원인을 좁힐 수 있다."
+      ],
+      "relates_to": [
+        "windows-exe-and-shortcut"
+      ]
+    },
+    {
+      "id": "persona-customization",
+      "title": "페르소나 커스터마이즈",
+      "kind": "task",
+      "status": "later",
+      "priority": "later",
+      "rank": 10,
+      "updated_at": "2026-04-02",
+      "tags": [
+        "personas",
+        "customization"
+      ],
+      "summary": "룬, 카논, 에코의 성격과 말투를 사용자 정의로 분기하는 일은 후순위로 둔다.",
+      "acceptance": [
+        "핵심 루프 품질과 문맥 관리가 정리된 뒤 착수한다."
+      ]
+    },
+    {
+      "id": "user-defined-editing-rules",
+      "title": "사용자 정의 편집 규칙",
+      "kind": "task",
+      "status": "later",
+      "priority": "later",
+      "rank": 20,
+      "updated_at": "2026-04-02",
+      "tags": [
+        "rules",
+        "customization"
+      ],
+      "summary": "사용자별 편집 규칙 입력은 작품 문맥 구조가 먼저 안정된 뒤 다룬다.",
+      "acceptance": [
+        "작품별 고정 규칙 저장 구조가 먼저 마련된다."
+      ]
+    },
+    {
+      "id": "multi-work-management",
+      "title": "다중 작품 관리",
+      "kind": "task",
+      "status": "later",
+      "priority": "later",
+      "rank": 30,
+      "updated_at": "2026-04-02",
+      "tags": [
+        "works",
+        "management"
+      ],
+      "summary": "여러 작품을 동시에 관리하는 큰 흐름은 기본 작품 문맥 구조 이후로 미룬다.",
+      "acceptance": [
+        "단일 작품 문맥 저장 구조가 먼저 안정화된다."
+      ]
+    },
+    {
+      "id": "publish-ready-export-format",
+      "title": "자동 발행용 export 포맷",
+      "kind": "task",
+      "status": "later",
+      "priority": "later",
+      "rank": 40,
+      "updated_at": "2026-04-02",
+      "tags": [
+        "export",
+        "publishing"
+      ],
+      "summary": "발행용 포맷은 내부 작업 루프와 문맥 관리가 안정된 뒤 다룬다.",
+      "acceptance": [
+        "현재는 작업실 흐름이 우선이고 발행 포맷은 뒤로 둔다."
+      ]
+    },
+    {
+      "id": "local-llm-interface",
+      "title": "로컬 LLM 인터페이스",
+      "kind": "task",
+      "status": "later",
+      "priority": "later",
+      "rank": 50,
+      "updated_at": "2026-04-02",
+      "tags": [
+        "llm",
+        "local"
+      ],
+      "summary": "로컬 모델 연동은 현재 Gemini/mock 흐름을 충분히 다듬은 뒤 검토한다.",
+      "acceptance": [
+        "현행 서비스 모드의 안정성과 검증이 먼저 확보된다."
+      ]
+    }
+  ],
+  "archived_items": [
+    {
+      "id": "fastapi-static-frontend-connected",
+      "title": "FastAPI 백엔드와 정적 프론트엔드가 연결되어 있다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 10,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "stability"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "backend",
+        "frontend"
+      ]
+    },
+    {
+      "id": "rune-review-loop-working",
+      "title": "`룬 초안 -> 카논 피드백 / 에코 코멘트 -> 룬 최종본` 루프가 동작한다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 20,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "loop_quality"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "loop",
+        "personas"
+      ]
+    },
+    {
+      "id": "settings-documents-editable",
+      "title": "설정 문서 3종 편집이 가능하다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 30,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "context_management"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "settings"
+      ]
+    },
+    {
+      "id": "local-json-storage-persisted",
+      "title": "루프 상태, 히스토리, Sil 로그, 방문 메타가 로컬 JSON에 저장된다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 40,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "stability"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "storage",
+        "json"
+      ]
+    },
+    {
+      "id": "cost-estimate-ui",
+      "title": "비용 추정 UI가 있다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 50,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "cost",
+        "ui"
+      ]
+    },
+    {
+      "id": "mock-mode-available-without-gemini-key",
+      "title": "Gemini API 키가 없을 때 mock 모드로 전체 흐름을 검증할 수 있다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 60,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "stability",
+        "testing"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "mock",
+        "gemini"
+      ]
+    },
+    {
+      "id": "prompt-version-meta-stored",
+      "title": "프롬프트 버전 메타가 루프와 히스토리에 저장된다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 70,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "stability"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "prompts",
+        "metadata"
+      ]
+    },
+    {
+      "id": "main-screen-chat-centered",
+      "title": "메인 화면이 채팅 중심 UI로 재구성되어 있다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 10,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "chat",
+        "ui"
+      ]
+    },
+    {
+      "id": "workroom-archive-split",
+      "title": "`Workroom` / `Archive` 화면 분리가 끝났다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 20,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "workroom",
+        "archive"
+      ]
+    },
+    {
+      "id": "open-artifacts-as-md",
+      "title": "초안, 피드백, 코멘트, 최종본을 `.md` 첨부처럼 열어볼 수 있다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 30,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "attachments",
+        "markdown"
+      ]
+    },
+    {
+      "id": "history-search-filter-detail-export",
+      "title": "히스토리 검색, 필터, 상세 보기, export가 된다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 40,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "history",
+        "search",
+        "export"
+      ]
+    },
+    {
+      "id": "canon-feedback-structured",
+      "title": "카논 피드백이 구조화되어 저장/표시된다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 20,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "loop_quality"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "canon",
+        "feedback"
+      ]
+    },
+    {
+      "id": "echo-comment-structured-axes",
+      "title": "에코 코멘트가 `반응 / 몰입 / 이탈감` 축으로 구조화되어 저장/표시된다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 30,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "loop_quality"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "echo",
+        "feedback"
+      ]
+    },
+    {
+      "id": "early-stop-quality-signal-based",
+      "title": "조기 종료 판단 로직이 구조화된 품질 신호를 기준으로 동작한다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 10,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "loop_quality"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "quality",
+        "early-stop"
+      ]
+    },
+    {
+      "id": "windows-exe-and-shortcut",
+      "title": "Windows 실행 파일(`.exe`)과 바로가기가 있다.",
+      "kind": "capability",
+      "status": "done",
+      "rank": 50,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "stability"
+      ],
+      "spotlights": [
+        "current_position"
+      ],
+      "tags": [
+        "windows",
+        "distribution"
+      ]
+    },
+    {
+      "id": "updates-stay-on-original-goal",
+      "title": "현재까지의 업데이트는 최초 목적에서 벗어나지 않았다.",
+      "kind": "decision",
+      "status": "done",
+      "rank": 10,
+      "updated_at": "2026-03-30",
+      "spotlights": [
+        "checkpoint"
+      ],
+      "tags": [
+        "direction"
+      ]
+    },
+    {
+      "id": "structured-feedback-supports-loop-comparison",
+      "title": "채팅형 메인 화면, Workroom/Archive 분리, 구조화된 카논/에코 피드백은 모두 `루프를 더 잘 돌리고 비교하기 쉽게 만드는 방향`이다.",
+      "kind": "decision",
+      "status": "done",
+      "rank": 20,
+      "updated_at": "2026-03-30",
+      "spotlights": [
+        "checkpoint"
+      ],
+      "tags": [
+        "direction",
+        "comparison"
+      ]
+    },
+    {
+      "id": "quality-context-reuse-more-important-than-visuals",
+      "title": "시각 연출보다 `루프 품질 판단`, `문맥 관리`, `반복 지적의 재활용`이 이제 더 중요한 단계로 넘어왔다.",
+      "kind": "decision",
+      "status": "done",
+      "rank": 30,
+      "updated_at": "2026-03-30",
+      "spotlights": [
+        "checkpoint"
+      ],
+      "tags": [
+        "direction",
+        "quality"
+      ]
+    },
+    {
+      "id": "show-final-reflection-summary",
+      "title": "최종본 반영 흔적 요약 표시",
+      "kind": "capability",
+      "status": "done",
+      "rank": 40,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "loop_quality"
+      ],
+      "tags": [
+        "quality",
+        "summary"
+      ]
+    },
+    {
+      "id": "surface-loop-quality-score-and-reason",
+      "title": "루프별 품질 점수와 근거를 카드/상세 화면에서 더 선명하게 노출",
+      "kind": "capability",
+      "status": "done",
+      "rank": 50,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "loop_quality"
+      ],
+      "tags": [
+        "quality",
+        "ui"
+      ]
+    },
+    {
+      "id": "use-quality-result-in-history-filtering",
+      "title": "품질 판단 결과를 히스토리 목록 필터와 정렬에도 더 강하게 활용",
+      "kind": "capability",
+      "status": "done",
+      "rank": 90,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "loop_quality"
+      ],
+      "tags": [
+        "quality",
+        "history"
+      ]
+    },
+    {
+      "id": "split-rarely-used-info",
+      "title": "자주 안 보는 정보 분리",
+      "kind": "capability",
+      "status": "done",
+      "rank": 20,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux"
+      ],
+      "tags": [
+        "layout",
+        "ux"
+      ]
+    },
+    {
+      "id": "show-flow-between-draft-feedback-comment-final",
+      "title": "초안 / 피드백 / 코멘트 / 최종본 연결 흐름 표시",
+      "kind": "capability",
+      "status": "done",
+      "rank": 30,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux"
+      ],
+      "tags": [
+        "flow",
+        "ux"
+      ]
+    },
+    {
+      "id": "selected-loop-and-history-export",
+      "title": "선택 루프 / 히스토리 export",
+      "kind": "capability",
+      "status": "done",
+      "rank": 50,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux"
+      ],
+      "tags": [
+        "export",
+        "history"
+      ]
+    },
+    {
+      "id": "mobile-responsive-baseline",
+      "title": "모바일 기준 기본 반응형 보정",
+      "kind": "capability",
+      "status": "done",
+      "rank": 60,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux"
+      ],
+      "tags": [
+        "mobile",
+        "responsive"
+      ]
+    },
+    {
+      "id": "title-screen-and-presentation",
+      "title": "시작 타이틀 화면과 연출",
+      "kind": "capability",
+      "status": "done",
+      "rank": 40,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux",
+        "worldbuilding"
+      ],
+      "tags": [
+        "title-screen",
+        "presentation"
+      ]
+    },
+    {
+      "id": "structured-canon-echo-conflict-comparison",
+      "title": "카논 / 에코 의견 충돌을 구조적으로 비교 표시",
+      "kind": "capability",
+      "status": "done",
+      "rank": 80,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux"
+      ],
+      "tags": [
+        "canon",
+        "echo",
+        "comparison"
+      ]
+    },
+    {
+      "id": "running-cancel-button-and-state-control",
+      "title": "실행 중 취소 버튼과 상태 제어",
+      "kind": "capability",
+      "status": "done",
+      "rank": 90,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux"
+      ],
+      "tags": [
+        "cancel",
+        "state"
+      ]
+    },
+    {
+      "id": "main-chat-density-balloon-info-tuning",
+      "title": "메인 채팅 밀도와 말풍선 정보량 추가 조정",
+      "kind": "capability",
+      "status": "done",
+      "rank": 100,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "frontend_ux"
+      ],
+      "tags": [
+        "chat",
+        "density"
+      ]
+    },
+    {
+      "id": "persona-presence-and-active-state-expression",
+      "title": "페르소나별 존재감과 활성 상태 표현",
+      "kind": "capability",
+      "status": "done",
+      "rank": 10,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "worldbuilding"
+      ],
+      "tags": [
+        "personas",
+        "presentation"
+      ]
+    },
+    {
+      "id": "loop-card-presentation",
+      "title": "루프 카드 연출",
+      "kind": "capability",
+      "status": "done",
+      "rank": 20,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "worldbuilding"
+      ],
+      "tags": [
+        "cards",
+        "presentation"
+      ]
+    },
+    {
+      "id": "sil-entrance-presentation",
+      "title": "Sil 등장 연출",
+      "kind": "capability",
+      "status": "done",
+      "rank": 30,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "worldbuilding"
+      ],
+      "tags": [
+        "sil",
+        "presentation"
+      ]
+    },
+    {
+      "id": "visit-greeting-branch-upgrade",
+      "title": "첫 실행 / 복귀 / 장기 부재 문구 분기 고도화",
+      "kind": "capability",
+      "status": "done",
+      "rank": 50,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "worldbuilding"
+      ],
+      "tags": [
+        "greeting",
+        "visit"
+      ]
+    },
+    {
+      "id": "gemini-retry-and-response-validation",
+      "title": "Gemini 재시도와 응답 검증",
+      "kind": "capability",
+      "status": "done",
+      "rank": 10,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "stability"
+      ],
+      "tags": [
+        "gemini",
+        "retry"
+      ]
+    },
+    {
+      "id": "recover-running-state-on-restart",
+      "title": "서버 재시작 시 `running` 상태 복구 정책",
+      "kind": "capability",
+      "status": "done",
+      "rank": 30,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "stability"
+      ],
+      "tags": [
+        "restart",
+        "recovery"
+      ]
+    },
+    {
+      "id": "loop-cancel-endpoint",
+      "title": "루프 취소 엔드포인트",
+      "kind": "capability",
+      "status": "done",
+      "rank": 40,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "stability"
+      ],
+      "tags": [
+        "cancel",
+        "api"
+      ]
+    },
+    {
+      "id": "actual-response-cost-settlement",
+      "title": "실제 응답 기준 비용 정산",
+      "kind": "capability",
+      "status": "done",
+      "rank": 50,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "stability"
+      ],
+      "tags": [
+        "cost",
+        "usage"
+      ]
+    },
+    {
+      "id": "smoke-test-automation",
+      "title": "smoke test 자동화",
+      "kind": "capability",
+      "status": "done",
+      "rank": 60,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "stability"
+      ],
+      "tags": [
+        "testing",
+        "automation"
+      ]
+    },
+    {
+      "id": "python-test-suite",
+      "title": "Python 테스트 31개",
+      "kind": "capability",
+      "status": "done",
+      "rank": 10,
+      "updated_at": "2026-04-02",
+      "areas": [
+        "testing"
+      ],
+      "tags": [
+        "python",
+        "tests"
+      ]
+    },
+    {
+      "id": "mock-mode-full-flow-smoke-test",
+      "title": "mock 모드 전체 흐름 smoke test",
+      "kind": "capability",
+      "status": "done",
+      "rank": 20,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "testing"
+      ],
+      "tags": [
+        "mock",
+        "smoke-test"
+      ]
+    },
+    {
+      "id": "loop-cancel-api-test",
+      "title": "루프 취소 API 테스트",
+      "kind": "capability",
+      "status": "done",
+      "rank": 30,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "testing"
+      ],
+      "tags": [
+        "api",
+        "cancel"
+      ]
+    },
+    {
+      "id": "loop-runner-integration-test",
+      "title": "loop runner 통합 테스트",
+      "kind": "capability",
+      "status": "done",
+      "rank": 40,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "testing"
+      ],
+      "tags": [
+        "integration",
+        "loop"
+      ]
+    },
+    {
+      "id": "frontend-min-interaction-test",
+      "title": "프론트엔드 최소 상호작용 테스트",
+      "kind": "capability",
+      "status": "done",
+      "rank": 50,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "testing"
+      ],
+      "tags": [
+        "frontend",
+        "smoke-test"
+      ]
+    },
+    {
+      "id": "canon-structure-test",
+      "title": "카논 구조화 테스트",
+      "kind": "capability",
+      "status": "done",
+      "rank": 60,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "testing"
+      ],
+      "tags": [
+        "canon",
+        "tests"
+      ]
+    },
+    {
+      "id": "echo-structure-test",
+      "title": "에코 구조화 테스트",
+      "kind": "capability",
+      "status": "done",
+      "rank": 70,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "testing"
+      ],
+      "tags": [
+        "echo",
+        "tests"
+      ]
+    },
+    {
+      "id": "quality-judgement-test",
+      "title": "품질 판단 테스트",
+      "kind": "capability",
+      "status": "done",
+      "rank": 80,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "testing"
+      ],
+      "tags": [
+        "quality",
+        "tests"
+      ]
+    },
+    {
+      "id": "visit-greeting-branch-test",
+      "title": "방문 인사 분기 테스트",
+      "kind": "capability",
+      "status": "done",
+      "rank": 90,
+      "updated_at": "2026-03-30",
+      "areas": [
+        "testing"
+      ],
+      "tags": [
+        "visit",
+        "tests"
+      ]
+    }
+  ]
+}

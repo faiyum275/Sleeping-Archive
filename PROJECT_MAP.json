@@ -1,0 +1,141 @@
+{
+  "schema_version": "sleeping-archive.project-map.v1",
+  "document_kind": "quick_agent_map",
+  "purpose": "Give a first-contact AI agent a short route to the repo's real entrypoints, canonical data, and scan noise.",
+  "read_order": [
+    {
+      "path": "AGENTS.md",
+      "reason": "Local tone and collaboration rules."
+    },
+    {
+      "path": "PROJECT_MAP.json",
+      "reason": "Quick routing map for first-pass repo understanding."
+    },
+    {
+      "path": "CHECKLIST.md",
+      "reason": "Current unfinished work only."
+    },
+    {
+      "path": "README.json",
+      "reason": "Deep reference for runtime, API, persistence, and code map."
+    }
+  ],
+  "ignore_by_default": [
+    {
+      "path": "build/",
+      "reason": "Build artifacts, not source."
+    },
+    {
+      "path": "dist/",
+      "reason": "Packaged output and duplicated runtime data."
+    },
+    {
+      "path": ".tmp_test/",
+      "reason": "Ephemeral test runs."
+    },
+    {
+      "path": ".tmp_repo_push/",
+      "reason": "Temporary push workspace."
+    },
+    {
+      "path": "**/__pycache__/",
+      "reason": "Interpreter cache noise."
+    },
+    {
+      "path": "storage/history/",
+      "reason": "Large generated run history; inspect only when the task needs specific history files."
+    },
+    {
+      "path": "backend/storage/history/",
+      "reason": "Non-canonical local artifact folder inside the Python package."
+    },
+    {
+      "path": "backend/storage/*.json",
+      "reason": "Do not treat package-local JSON artifacts as active runtime state."
+    }
+  ],
+  "canonical_paths": {
+    "docs": {
+      "tone_rules": "AGENTS.md",
+      "quick_map": "PROJECT_MAP.json",
+      "deep_reference": "README.json",
+      "current_work": "CHECKLIST.md",
+      "checklist_manifest": "checklist/manifest.json"
+    },
+    "code": {
+      "api_entrypoint": "backend/main.py",
+      "loop_orchestration": "backend/loop/runner.py",
+      "persistence_logic": "backend/storage/repository.py",
+      "frontend_state_and_ui": "frontend/app.js",
+      "checklist_logic": "backend/checklist.py",
+      "checklist_source": "checklist/items.json"
+    },
+    "runtime_storage": {
+      "source_mode_root": "storage/",
+      "packaged_mode_root": "<exe dir>/SleepingArchiveData/storage/",
+      "repo_example_when_built_locally": "dist/SleepingArchiveData/storage/",
+      "override_env_var": "SLEEPING_ARCHIVE_HOME"
+    },
+    "generated_outputs": {
+      "checklist_markdown": "CHECKLIST.md",
+      "checklist_sources": [
+        "checklist/items.json",
+        "checklist/events.jsonl"
+      ]
+    }
+  },
+  "task_router": [
+    {
+      "task": "Change API behavior or response shape",
+      "start_with": [
+        "backend/main.py",
+        "backend/models.py"
+      ]
+    },
+    {
+      "task": "Change loop order, cancellation, recovery, or quality flow",
+      "start_with": [
+        "backend/loop/runner.py",
+        "backend/loop/quality_check.py"
+      ]
+    },
+    {
+      "task": "Change prompt wording or persona behavior",
+      "start_with": [
+        "backend/personas/prompts.py",
+        "backend/personas/"
+      ]
+    },
+    {
+      "task": "Change persistence format or runtime storage resolution",
+      "start_with": [
+        "backend/config.py",
+        "backend/storage/repository.py"
+      ]
+    },
+    {
+      "task": "Change UI state, rendering, or interactions",
+      "start_with": [
+        "frontend/app.js",
+        "frontend/index.html",
+        "frontend/style.css"
+      ]
+    },
+    {
+      "task": "Change checklist behavior or current task data",
+      "start_with": [
+        "checklist/items.json",
+        "checklist/events.jsonl",
+        "backend/checklist.py",
+        "scripts/render_checklist.py"
+      ]
+    }
+  ],
+  "runtime_truth": [
+    "In source mode, runtime JSON lives under storage/ unless SLEEPING_ARCHIVE_HOME overrides the app home.",
+    "In packaged mode, runtime JSON lives under <exe dir>/SleepingArchiveData/storage/.",
+    "backend/storage/ is a Python package. Treat backend/storage/*.json and backend/storage/history/ as non-canonical local artifacts.",
+    "CHECKLIST.md is generated output. Edit checklist/items.json and checklist/events.jsonl instead.",
+    "Use README.json only after the first-pass route is clear; it is the deep manual, not the shortest entrypoint."
+  ]
+}
